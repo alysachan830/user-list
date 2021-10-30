@@ -2,13 +2,13 @@
   <div class="container">
     <ul class="row">
       <li v-for="person in people" :key="person['_id']" class="col-lg-4 col-md-6 mb-md-5 mb-2">
-        <router-link :to="`/${person['_id']}`" class="card d-flex px-2 py-3">
+        <a href="#" @click.prevent="showDetails(person)" class="card d-flex px-2 py-3">
           <img :src="person.picture" alt="avatar" class="card__img me-3" />
           <div>
             <p>{{ person.name.first }} {{ person.name.last }}</p>
             <p class="text-info font-s">{{ person.email }}</p>
           </div>
-        </router-link>
+        </a>
       </li>
     </ul>
   </div>
@@ -40,6 +40,15 @@ export default {
         confirmButtonText: '取消',
       });
     }
+  },
+  methods: {
+    showDetails(person) {
+      this.$router.push({
+        name: 'personDetails',
+        // eslint-disable-next-line dot-notation
+        params: { person, id: person['_id'] },
+      });
+    },
   },
 };
 </script>
