@@ -54,6 +54,7 @@ export default {
   props: {
     person: {
       type: Object,
+      default: () => ({}),
     },
   },
   components: {
@@ -76,6 +77,14 @@ export default {
     if (!latLng.every((value) => value)) return;
     this.markerLatLng = latLng;
     this.center = latLng;
+  },
+  beforeRouteEnter(to, from, next) {
+    if (!to.params.person) next('/');
+    else next();
+  },
+  beforeRouteUpdate(to, from, next) {
+    if (!to.params.person) next('/');
+    else next();
   },
 };
 </script>
