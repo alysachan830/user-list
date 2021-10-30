@@ -11,6 +11,8 @@ const routes = [
   },
   {
     path: '/:id',
+    name: 'personDetails',
+    props: (route) => route.params,
     component: () => import('@/views/Person.vue'),
   },
 ];
