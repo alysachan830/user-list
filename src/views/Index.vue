@@ -1,22 +1,31 @@
 <template>
   <div class="container">
-    <ul class="row mb-3">
-      <li
-        v-for="person in displayedPeople"
-        :key="person['_id']"
-        class="col-lg-4 col-md-6 mb-md-5 mb-2"
-      >
-        <a href="#" @click.prevent="showDetails(person)" class="card d-flex px-2 py-3">
-          <img :src="person.picture" alt="avatar" class="card__img me-3" />
-          <div>
-            <p>{{ person.name.first }} {{ person.name.last }}</p>
-            <p class="text-info font-s">{{ person.email }}</p>
-          </div>
-        </a>
-      </li>
-    </ul>
-    <div class="d-flex justify-content-center mb-5">
-      <Pagination :totalPages="totalPages" @selectPage="changePage" />
+    <div v-if="people.length > 0">
+      <ul class="row mb-3">
+        <li
+          v-for="person in displayedPeople"
+          :key="person['_id']"
+          class="col-lg-4 col-md-6 mb-md-5 mb-2"
+        >
+          <a href="#" @click.prevent="showDetails(person)" class="card d-flex">
+            <img :src="person.picture" alt="avatar" class="card__img" />
+            <div>
+              <p>{{ person.name.first }} {{ person.name.last }}</p>
+              <p class="text-info font-s">{{ person.email }}</p>
+            </div>
+          </a>
+        </li>
+      </ul>
+      <div class="d-flex justify-content-center mb-5">
+        <Pagination :totalPages="totalPages" @selectPage="changePage" />
+      </div>
+    </div>
+    <div v-else>
+      <ul class="row">
+        <li v-for="num in 12" :key="num" class="col-lg-4 col-md-6 mb-md-5 mb-2">
+          <SkeletonCard />
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -24,6 +33,7 @@
 <script>
 import Swal from 'sweetalert2';
 import Pagination from '@/components/Pagination.vue';
+import SkeletonCard from '@/components/SkeletonCard.vue';
 
 export default {
   data() {
@@ -35,6 +45,7 @@ export default {
   },
   components: {
     Pagination,
+    SkeletonCard,
   },
   async created() {
     try {
@@ -75,19 +86,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.card {
-  transition: box-shadow 0.2s;
-
-  &__img {
-    width: 56px;
-    height: 56px;
-    border-radius: 10%;
-  }
-
-  &:hover {
-    box-shadow: 2px 4px 10px #dfdfdf;
-  }
-}
-</style>
