@@ -1,27 +1,34 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
+import Home from '@/views/Index.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
     component: Home,
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    path: '/:id',
+    name: 'personDetails',
+    props: (route) => route.params,
+    component: () => import('@/views/Person.vue'),
   },
 ];
 
 const router = new VueRouter({
   routes,
+});
+
+router.afterEach((to) => {
+  Vue.nextTick(() => {
+    if (to.params.person) {
+      document.title = `${to.params.person.name.first} ${to.params.person.name.last}`;
+    } else {
+      document.title = 'Users';
+    }
+  });
 });
 
 export default router;
