@@ -23,7 +23,7 @@
         <span class="text-uppercase">Location</span>
       </p>
       <div v-if="markerLatLng">
-        <l-map style="height: 400px" :zoom="zoom" :center="center">
+        <l-map class="map" :zoom="zoom" :center="center">
           <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
           <l-marker :lat-lng="markerLatLng"></l-marker>
         </l-map>
@@ -93,5 +93,9 @@ export default {
   width: 56px;
   height: 56px;
   border-radius: 10%;
+}
+
+.map {
+  height: 400px;
 }
 </style>
