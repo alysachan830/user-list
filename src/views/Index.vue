@@ -4,7 +4,7 @@
       <ul class="row mb-3">
         <li
           v-for="person in displayedPeople"
-          :key="person['_id']"
+          :key="person._id"
           class="col-lg-4 col-md-6 mb-md-5 mb-2"
         >
           <a href="#" @click.prevent="showDetails(person)" class="card d-flex">
