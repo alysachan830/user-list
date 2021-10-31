@@ -82,8 +82,7 @@ export default {
     showDetails(person) {
       this.$router.push({
         name: 'personDetails',
-        // eslint-disable-next-line dot-notation
-        params: { person, id: person['_id'] },
+        params: { person, id: person._id },
       });
     },
     changePage(page) {
