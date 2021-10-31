@@ -4,7 +4,7 @@
       <ul class="row mb-3">
         <li
           v-for="person in displayedPeople"
-          :key="person['_id']"
+          :key="person._id"
           class="col-lg-4 col-md-6 mb-md-5 mb-2"
         >
           <a href="#" @click.prevent="showDetails(person)" class="card d-flex">
@@ -82,8 +82,7 @@ export default {
     showDetails(person) {
       this.$router.push({
         name: 'personDetails',
-        // eslint-disable-next-line dot-notation
-        params: { person, id: person['_id'] },
+        params: { person, id: person._id },
       });
     },
     changePage(page) {

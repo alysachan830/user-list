@@ -38,7 +38,6 @@ import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
 
 import { Icon } from 'leaflet';
 
-// eslint-disable-next-line no-underscore-dangle
 delete Icon.Default.prototype._getIconUrl;
 const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
 const iconUrl = require('leaflet/dist/images/marker-icon.png');
