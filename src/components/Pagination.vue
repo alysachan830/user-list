@@ -44,6 +44,7 @@ export default {
       } else {
         this.currentPage += 1;
       }
+      this.$emit('selectPage', this.currentPage);
     },
   },
 };

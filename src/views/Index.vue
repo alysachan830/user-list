@@ -4,7 +4,7 @@
       <ul class="row mb-3">
         <li
           v-for="person in displayedPeople"
-          :key="person['_id']"
+          :key="person._id"
           class="col-lg-4 col-md-6 mb-md-5 mb-2"
         >
           <a href="#" @click.prevent="showDetails(person)" class="card d-flex">
@@ -20,12 +20,16 @@
         <Pagination :totalPages="totalPages" @selectPage="changePage" />
       </div>
     </div>
-    <div v-else>
+    <div v-else-if="errorMsg === ''">
       <ul class="row">
         <li v-for="num in 12" :key="num" class="col-lg-4 col-md-6 mb-md-5 mb-2">
           <SkeletonCard />
         </li>
       </ul>
+    </div>
+    <div v-else class="text-center">
+      <span class="material-icons font-2xl"> warning </span>
+      <p class="font-m">{{ errorMsg }}</p>
     </div>
   </div>
 </template>
@@ -40,7 +44,7 @@ export default {
     return {
       people: [],
       currentPage: 1,
-      errorMsg: '', // 載入有誤時出現
+      errorMsg: '',
     };
   },
   components: {
@@ -59,9 +63,11 @@ export default {
     } catch (error) {
       Swal.fire({
         icon: 'error',
-        title: '載入資料有誤，請稍後再試',
-        confirmButtonText: '取消',
+        title: 'Something went wrong!',
+        text: 'Please try again later',
+        confirmButtonText: 'Cancel',
       });
+      this.errorMsg = 'Something went wrong, please try again later';
     }
   },
   computed: {
@@ -76,8 +82,7 @@ export default {
     showDetails(person) {
       this.$router.push({
         name: 'personDetails',
-        // eslint-disable-next-line dot-notation
-        params: { person, id: person['_id'] },
+        params: { person, id: person._id },
       });
     },
     changePage(page) {
