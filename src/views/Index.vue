@@ -9,10 +9,10 @@
         >
           <a href="#" @click.prevent="showDetails(person)" class="card d-flex">
             <img :src="person.picture" alt="avatar" class="card__img" />
-            <div>
-              <p>{{ person.name.first }} {{ person.name.last }}</p>
-              <p class="text-info font-s">{{ person.email }}</p>
-            </div>
+            <ul>
+              <li>{{ person.name.first }} {{ person.name.last }}</li>
+              <li class="text-info font-s">{{ person.email }}</li>
+            </ul>
           </a>
         </li>
       </ul>
