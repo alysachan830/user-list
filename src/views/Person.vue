@@ -35,8 +35,8 @@
 
 <script>
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
-
 import { Icon } from 'leaflet';
+import getPeopleAPI from '@/mixins/getPeopleAPI';
 
 delete Icon.Default.prototype._getIconUrl;
 const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
@@ -51,7 +51,7 @@ Icon.Default.mergeOptions({
 
 export default {
   props: {
-    person: {
+    selectedPerson: {
       type: Object,
       default: () => ({}),
     },
@@ -61,8 +61,10 @@ export default {
     LTileLayer,
     LMarker,
   },
+  mixins: [getPeopleAPI],
   data() {
     return {
+      person: { location: {}, name: {} },
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution:
         '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -71,19 +73,44 @@ export default {
       markerLatLng: null,
     };
   },
-  mounted() {
-    const latLng = Object.values(this.person.location);
-    if (!latLng.every((value) => value)) return;
-    this.markerLatLng = latLng;
-    this.center = latLng;
+  methods: {
+    updateMap() {
+      const latLng = Object.values(this.person.location);
+      if (!latLng.every((value) => value)) return;
+      this.markerLatLng = latLng;
+      this.center = latLng;
+    },
   },
-  beforeRouteEnter(to, from, next) {
-    if (!to.params.person) next('/');
-    else next();
-  },
-  beforeRouteUpdate(to, from, next) {
-    if (!to.params.person) next('/');
-    else next();
+  async created() {
+    // If we have props
+    if (Object.keys(this.selectedPerson).length > 0) {
+      this.person = this.selectedPerson;
+      sessionStorage.setItem('person', JSON.stringify(this.person));
+      this.updateMap();
+      document.title = `${this.person.name.first} ${this.person.name.last}`;
+      return;
+    }
+
+    // If we can get person detail from sessionStorage, that matches the person id in URL
+    const cachePerson = sessionStorage.getItem('person');
+    if (cachePerson && JSON.parse(cachePerson)._id === this.$route.fullPath.split('/')[1]) {
+      this.person = JSON.parse(cachePerson);
+      this.updateMap();
+      document.title = `${this.person.name.first} ${this.person.name.last}`;
+      return;
+    }
+
+    // If the data in sessionStorage is unavailable, call API
+    await this.getPeople();
+    const target = this.people.find((person) => person._id === this.$route.fullPath.split('/')[1]);
+    if (target === undefined) {
+      this.$router.push('/');
+      return;
+    }
+    this.person = target;
+    sessionStorage.setItem('person', JSON.stringify(this.person));
+    this.updateMap();
+    document.title = `${this.person.name.first} ${this.person.name.last}`;
   },
 };
 </script>

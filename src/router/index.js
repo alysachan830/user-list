@@ -21,14 +21,4 @@ const router = new VueRouter({
   routes,
 });
 
-router.afterEach((to) => {
-  Vue.nextTick(() => {
-    if (to.params.person) {
-      document.title = `${to.params.person.name.first} ${to.params.person.name.last}`;
-    } else {
-      document.title = 'Users';
-    }
-  });
-});
-
 export default router;
